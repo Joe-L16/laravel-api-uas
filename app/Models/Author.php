@@ -13,6 +13,7 @@ class Author extends Model
     protected $fillable = [
         'name',
         'birthdate',
+        'email',
     ];
 
     public function posts()
@@ -36,11 +37,13 @@ class Author extends Model
             return [
                 'name' => 'required|string|max:225',
                 'birthdate' => 'required|date',
+                'email' => 'required|email|unique:authors,email',
             ];
         } elseif ($process == 'update') {
             return [
                 'name' => 'required|string|max:225',
                 'birthdate' => 'required|date',
+                'email' => 'required|email|unique:authors,email',
             ];
         }
     }
@@ -56,6 +59,7 @@ class Author extends Model
         $customAttributes = [
             'name' => 'Nama',
             'birthdate' => 'Tanggal Lahir',
+            'email' => 'Email',
         ];
 
         $validator->addReplacer('required', function ($message, $attribute, $rule, $parameters) use ($customAttributes) {
@@ -64,6 +68,14 @@ class Author extends Model
 
         $validator->addReplacer('date', function ($message, $attribute, $rule, $parameters) use ($customAttributes) {
             return str_replace(':attribute', $customAttributes[$attribute], ':attribute harus berupa tanggal.');
+        });
+
+        $validator->addReplacer('email', function ($message, $attribute, $rule, $parameters) use ($customAttributes) {
+            return str_replace(':attribute', $customAttributes[$attribute], ':attribute harus berupa alamat email yang valid.');
+        });
+
+        $validator->addReplacer('unique', function ($message, $attribute, $rule, $parameters) use ($customAttributes) {
+            return str_replace(':attribute', $customAttributes[$attribute], ':attribute sudah digunakan.');
         });
     }
 }

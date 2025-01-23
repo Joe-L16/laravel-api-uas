@@ -17,6 +17,7 @@ class CreateAuthorsTable extends Migration
             $table->id();
             $table->string('name');
             $table->date('birthdate');
+            $table->string('email');
             $table->timestamps();
         });
     }
